@@ -3,7 +3,7 @@ import { createServer } from 'node:http'
 let count = 0
 const server = createServer((req, res) => {
   console.log('request', req.url)
-  res.setHeader('Cache-Control', 'public, max-age=60')
+  res.setHeader('Cache-Control', 'public, max-age=10')
   res.end('hello world ' + count++)
 })
 
