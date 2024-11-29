@@ -1,4 +1,4 @@
-import { request, setGlobalDispatcher, getGlobalDispatcher, interceptors } from 'undici'
+import { request, setGlobalDispatcher, getGlobalDispatcher, interceptors, cacheStores } from 'undici'
 import { setTimeout as sleep } from 'timers/promises'
 import fastify from 'fastify'
 
@@ -12,9 +12,16 @@ app.get('/', async (req, reply) => {
 
 await app.listen({ port: 3000 })
 
+console.error(cacheStores)
+
 setGlobalDispatcher(getGlobalDispatcher().compose(
-  interceptors.cache()
+  interceptors.cache({
+    store: new cacheStores.SqliteCacheStore({
+      location: './cache.db'
+    })
+  })
 ))
+
 
 {
   const res = await request('http://localhost:3000/')
